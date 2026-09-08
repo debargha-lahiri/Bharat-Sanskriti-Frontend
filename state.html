@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cultural Dossier</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* Hide hotspot until 3D model is loaded */
+    #credit-hotspot {
+      display: none;
+    }
+
+    model-viewer.ready #credit-hotspot {
+      display: block;
+    }
+
+    /* Cultural Journey Ticker Animations */
+    .journey-ticker {
+      position: relative;
+      height: 150px;
+    }
+
+    .journey-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      transform: translateX(100%);
+      /* Snappy entrance, smooth deceleration */
+      animation: push-in-out 12s infinite cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .journey-slide:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .journey-slide:nth-child(2) {
+      animation-delay: 4s;
+    }
+
+    .journey-slide:nth-child(3) {
+      animation-delay: 8s;
+    }
+
+    @keyframes push-in-out {
+      0% {
+        transform: translateX(120%);
+        opacity: 0;
+      }
+
+      8%,
+      25% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      31%,
+      100% {
+        transform: translateX(-120%);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+
+  <!-- 3D Engine -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+</head>
+
+<body
+  class="bg-slate-950 text-slate-100 min-h-screen font-sans overflow-hidden transition-all duration-700 bg-cover bg-center bg-no-repeat bg-fixed">
+
+  <audio id="bg-audio" loop>
+    <source src="assets/ambient-chords.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Vertical Scroll Container -->
+  <main
+    class="flex flex-col w-full h-screen overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth scrollbar-hide relative z-10 bg-black/20">
+    <!-- SEGMENT 0: Hero Cover -->
+    <section
+      class="w-screen h-screen shrink-0 snap-center relative flex flex-col justify-center p-12 md:p-24 bg-gradient-to-r from-slate-950/95 via-slate-900/60 to-transparent">
+      <a href="index.html"
+        class="absolute top-10 left-12 text-amber-500 font-bold tracking-widest text-xs uppercase hover:text-amber-400 z-50 transition-colors">←
+        Return to Map</a>
+
+      <!-- Left Side: Titles -->
+      <div class="z-10 mt-12 max-w-3xl">
+        <h1 id="hero-title"
+          class="text-7xl md:text-8xl font-extrabold text-amber-400 drop-shadow-2xl mb-4 tracking-tight"></h1>
+        <p id="hero-capital"
+          class="text-lg md:text-xl text-slate-200 font-medium drop-shadow-md flex items-center gap-2 mb-24"></p>
+
+        <div class="animate-bounce flex flex-col items-start text-slate-400 opacity-80 cursor-pointer">
+          <span class="text-[10px] uppercase tracking-widest mb-2 font-bold">Scroll down to discover</span>
+          <i class="fa-solid fa-arrow-down ml-10"></i>
+        </div>
+      </div>
+
+      <!-- Right Side: Cinematic Cultural Journey Overview -->
+      <div
+        class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 w-[500px] bg-slate-950/60 backdrop-blur-xl border-y border-l border-white/10 p-10 rounded-l-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] z-20 overflow-hidden">
+        <div class="w-full">
+          <h4
+            class="text-xs text-amber-500 font-bold tracking-widest uppercase mb-6 border-b border-slate-700/50 pb-3 flex items-center gap-3">
+            <i class="fa-solid fa-route"></i> Experience Roadmap
+          </h4>
+
+          <div class="journey-ticker">
+            <!-- Phase 1 -->
+            <div class="journey-slide">
+              <h5 class="text-amber-400 font-extrabold text-3xl mb-3"><i class="fa-solid fa-landmark mr-2"></i> Echoes
+                of Stone</h5>
+              <p class="text-base text-slate-200 leading-relaxed">Descend into architectural marvels and ancient
+                lost-wax metallurgy.</p>
+            </div>
+            <!-- Phase 2 -->
+            <div class="journey-slide">
+              <h5 class="text-purple-400 font-extrabold text-3xl mb-3"><i class="fa-solid fa-masks-theater mr-2"></i>
+                Living Traditions</h5>
+              <p class="text-base text-slate-200 leading-relaxed">Experience vibrant classical theatre and rescue
+                critically endangered crafts.</p>
+            </div>
+            <!-- Phase 3 -->
+            <div class="journey-slide">
+              <h5 class="text-emerald-400 font-extrabold text-3xl mb-3"><i class="fa-solid fa-bowl-food mr-2"></i>
+                Culinary Matrix</h5>
+              <p class="text-base text-slate-200 leading-relaxed">Uncover historical flavor profiles and generate
+                AI-adapted authentic recipes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    </section>
+
+    <!-- SEGMENT 1: Historical Sculpture & Monuments (Includes 3D Viewer) -->
+    <section
+      class="w-screen h-screen shrink-0 snap-center flex items-center justify-center p-8 md:p-12 relative bg-slate-950/70 backdrop-blur-sm border-t border-slate-800">
+      <div class="w-full max-w-6xl h-[80vh] flex flex-col lg:flex-row gap-8 items-center mt-6">
+
+        <!-- 3D Model Box -->
+        <div
+          class="flex-1 w-full h-[450px] lg:h-full relative bg-black/60 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden shadow-2xl p-4 flex items-center justify-center group">
+          <model-viewer id="artifact-3d" src="assets/dhokra.glb" camera-controls auto-rotate rotation-per-second="30deg"
+            shadow-intensity="1" environment-image="neutral"
+            style="width: 100%; height: 100%; min-height: 400px; display: block;"
+            class="outline-none z-10 cursor-grab active:cursor-grabbing">
+
+            <button id="credit-hotspot" slot="hotspot-1" data-position="0 0.5 0" data-normal="0 1 0"
+              class="w-4 h-4 bg-amber-500 rounded-full animate-pulse border-2 border-white cursor-pointer shadow-[0_0_10px_#f59e0b]">
+              <div id="credit-popover"
+                class="hidden absolute left-8 top-1/2 -translate-y-1/2 w-80 bg-slate-900/95 backdrop-blur-xl border border-slate-700 p-5 rounded-xl shadow-2xl text-left pointer-events-auto cursor-default z-50">
+                <h4 id="dynamic-info-title"
+                  class="text-amber-400 font-bold mb-2 text-sm uppercase tracking-wider border-b border-slate-700 pb-2">
+                </h4>
+                <p id="dynamic-info-text" class="mt-3 text-xs text-slate-300 leading-relaxed mb-5"></p>
+                <div class="border-t border-slate-700/50 pt-3">
+                  <p class="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Asset Credit</p>
+                  <p id="dynamic-credit-text" class="text-xs text-white font-semibold"></p>
+                </div>
+              </div>
+            </button>
+          </model-viewer>
+          <div
+            class="absolute bottom-6 left-0 right-0 flex justify-center z-20 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity text-slate-400">
+            <div class="flex flex-col items-center"><span class="text-[10px] uppercase tracking-widest mb-1">Scroll for
+                Artforms</span><i class="fa-solid fa-chevron-down animate-bounce"></i></div>
+          </div>
+        </div>
+
+        <!-- History UI Panel -->
+        <div class="w-full lg:w-1/3 flex flex-col justify-center">
+          <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden group">
+            <div class="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
+            <h3 class="text-amber-400 font-bold uppercase text-xs mb-3 flex items-center gap-2"><i
+                class="fa-solid fa-landmark"></i> Monument & Sculpture</h3>
+            <p id="page-heritage" class="text-sm text-slate-300 leading-relaxed mb-6"></p>
+            <button onclick="openAI('history')"
+              class="w-full py-3 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-400 border border-amber-500/30 rounded-lg text-xs font-bold transition-all duration-300 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-robot"></i> Query AI: Historical Context
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEGMENT 2: Cultural Artforms -->
+    <section
+      class="w-screen h-screen shrink-0 snap-center flex items-center justify-center p-8 md:p-12 bg-slate-950/80 backdrop-blur-md border-t border-slate-800">
+      <div
+        class="w-full max-w-4xl bg-slate-900/80 border border-purple-500/30 p-8 md:p-12 rounded-3xl shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-20 -top-20 opacity-10 text-[200px] text-purple-500 pointer-events-none"><i
+            class="fa-solid fa-masks-theater"></i></div>
+        <h2 class="text-3xl font-extrabold text-purple-400 mb-2">Living Traditions</h2>
+        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Dance, Theatre & Folklore</h3>
+        <p id="page-art" class="text-lg text-slate-200 leading-relaxed mb-8 border-l-2 border-purple-500 pl-4"></p>
+
+        <div class="bg-black/40 border border-red-500/20 p-5 rounded-xl mb-6">
+          <p id="page-endangered-name" class="text-sm text-red-400 font-bold mb-1"></p>
+          <p class="text-xs text-slate-400">Currently classified as endangered or at-risk.</p>
+        </div>
+
+        <button onclick="openAI('artform')"
+          class="w-full md:w-auto px-8 py-4 bg-purple-600/20 hover:bg-purple-600 text-purple-300 hover:text-white border border-purple-500 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-3 group">
+          <i class="fa-solid fa-shield-heart group-hover:scale-110 transition-transform"></i> Launch Preservation
+          Protocol
+        </button>
+      </div>
+    </section>
+
+    <!-- SEGMENT 3: Culinary Heritage -->
+    <section
+      class="w-screen h-screen shrink-0 snap-center flex items-center justify-center p-8 md:p-12 bg-slate-950/90 backdrop-blur-lg border-t border-slate-800">
+      <div
+        class="w-full max-w-4xl bg-slate-900/80 border border-emerald-500/30 p-8 md:p-12 rounded-3xl shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-10 text-[200px] text-emerald-500 pointer-events-none"><i
+            class="fa-solid fa-bowl-food"></i></div>
+        <h2 class="text-3xl font-extrabold text-emerald-400 mb-2">Culinary Heritage</h2>
+        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Traditional Flavors</h3>
+        <p id="page-food" class="text-lg text-slate-200 leading-relaxed mb-8 border-l-2 border-emerald-500 pl-4"></p>
+
+        <button onclick="openAI('recipe')"
+          class="w-full md:w-auto px-8 py-4 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-3 group">
+          <i class="fa-solid fa-fire-burner group-hover:animate-pulse"></i> Generate Authentic AI Recipe
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- SANSKRITI AI PANEL -->
+  <!-- UNIVERSAL AI SLIDE-OUT PANEL -->
+  <div id="ai-panel"
+    class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-slate-900 border-l border-slate-700 shadow-[0_0_50px_rgba(0,0,0,0.8)] transform translate-x-full transition-transform duration-500 z-50 flex flex-col">
+
+    <!-- Header -->
+    <div class="p-6 border-b border-slate-800 flex justify-between items-center bg-black/30 shrink-0">
+      <div class="flex items-center gap-3">
+        <div
+          class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-black font-bold shadow-[0_0_10px_#f59e0b]">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <div>
+          <h3 class="text-md font-bold text-slate-100">Sanskriti AI</h3>
+          <p id="ai-context-tag" class="text-[10px] text-amber-500 uppercase tracking-widest">Awaiting Context...</p>
+        </div>
+      </div>
+      <button onclick="closeAI()" class="text-slate-500 hover:text-white transition"><i
+          class="fa-solid fa-xmark text-2xl"></i></button>
+    </div>
+
+    <!-- Chat Log Area -->
+    <div id="ai-chat-log" class="flex-1 p-6 overflow-y-auto bg-slate-900/50 space-y-4 flex flex-col scroll-smooth">
+      <!-- Messages inject here -->
+    </div>
+
+    <!-- Chat Input Area -->
+    <div class="p-4 bg-slate-950 border-t border-slate-800 shrink-0">
+      <form id="ai-chat-form" class="flex gap-2">
+        <input type="text" id="ai-chat-input" placeholder="Ask a follow-up question..."
+          class="flex-1 bg-slate-900 border border-slate-700 text-slate-200 placeholder-slate-500 text-xs rounded-xl px-4 py-3 focus:outline-none focus:border-amber-500 transition"
+          required autocomplete="off" />
+        <button type="submit"
+          class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold w-[42px] h-[42px] shrink-0 rounded-xl text-sm transition-transform hover:scale-105 active:scale-95 flex items-center justify-center shadow-lg">
+          <i class="fa-solid fa-paper-plane relative right-[1px]"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <script src="script.js"></script>
+  <script>
+    const API_BASE_URL = "https://bharat-sanskriti.onrender.com";
+
+    //Capture state name from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const stateName = urlParams.get('name');
+    console.log(stateName);
+
+    // Comment out by Romit
+    const culturalStaticData = {
+      "West Bengal": {
+        heritage: "Victoria Memorial & Bishnupur Terracotta Temples: 17th-century burnt-clay shrines built under the Malla kings, featuring intricate epic carvings.",
+        art: "Chhau Mask Dance & Baul Folk Music: Vigorous acrobatic martial dances accompanied by philosophical acoustic folk songs.",
+        endangeredArt: "Dhokra Lost-Wax Bell Metal Casting",
+        food: "Shorshe Ilish (Hilsa in pungent mustard gravy), Kosha Mangsho, and authentic chhena-based desserts like Mishti Doi."
+      },
+      "Rajasthan": {
+        heritage: "Amer Fort, Hawa Mahal & Kumbhalgarh Wall: Colossal Rajput hill forts and stone latticework palaces built from pink and yellow sandstone.",
+        art: "Ghoomar Dance, Kalbelia Folk Dance & Kathputli: Spirited swirling dances and ancient wooden string-puppet ballad performances.",
+        endangeredArt: "Kavad Storytelling Shrines & Blue Pottery",
+        food: "Dal Baati Churma (baked wheat balls steeped in ghee with mixed lentils), Gatte ki Sabzi, and fiery Laal Maas."
+      },
+      "Karnataka": {
+        heritage: "Vittala Temple Stone Chariot & Belur-Halebidu Hoysala Architecture: Intricate soapstone friezes and monolithic Dravidian stone shrines.",
+        art: "Yakshagana Theatre: Classical folk theatre combining vibrant makeup, elaborate headgear, dialogue, and rigorous footwork.",
+        endangeredArt: "Channapatna Lacquered Wood Toys & Kinhal Craft",
+        food: "Bisi Bele Bath (spiced lentil and tamarind rice), Mysore Pak, and crispy Davanagere Benne Dosa."
+      },
+      "Bihar": {
+        heritage: "Nalanda Mahavihara & Mahabodhi Temple: Ancient red-brick monastic universities and the historical seat of Buddha's enlightenment.",
+        art: "Madhubani (Mithila) Painting & Manjusha Art: Vibrant natural pigment paintings made using twigs, matchsticks, and fingers.",
+        endangeredArt: "Sikki Grass Basketry & Bawan Buti Weaving",
+        food: "Litti Chokha (roasted wheat dough stuffed with spiced sattu, paired with charred brinjal chokha) and Khaja."
+      },
+      "Gujarat": {
+        heritage: "Rani ki Vav Stepwell & Sun Temple, Modhera: Multi-tiered inverted subterranean water temple adorned with over 500 sculptures.",
+        art: "Garba, Dandiya Raas & Bhavai Folk Theatre: Rhythmic circular clapping dances centered around an earthen lamp.",
+        endangeredArt: "Rogan Fabric Painting & Patan Patola Double Ikat",
+        food: "Gujarati Thali featuring sweet-savory Gujarati Dal, Handvo, Khaman Dhokla, and seasonal Aamras."
+      },
+      "Punjab": {
+        heritage: "Golden Temple (Sri Harmandir Sahib) & Qila Mubarak: Gilded Sikh architectural sanctuary encircled by the holy Amrit Sarovar lake.",
+        art: "Bhangra & Giddha: High-energy celebratory folk dances propelled by the rhythmic beat of the dhol and tumbi.",
+        endangeredArt: "Traditional Thatheras Brass & Copper Utensil Craft",
+        food: "Makki di Roti with Sarson da Saag topped with homemade white butter, and Amritsari Kulcha."
+      },
+      "Kerala": {
+        heritage: "Padmanabhaswamy Temple & Bekal Fort: Imposing granite gopurams preserving ancient Travancore murals.",
+        art: "Kathakali, Koodiyattam & Theyyam: Ritual dance drama characterized by vivid facially painted masks and drumming.",
+        endangeredArt: "Aranmula Kannadi (Polished Metal Mirrors)",
+        food: "Kerala Sadhya served on banana leaves, featuring Appam with Ishtu, Avial, Malabar Parotta, and Payasam."
+      }
+    };
+
+    const stateData = culturalStaticData[stateName] || culturalStaticData["West Bengal"];
+    // Comment out by Romit
+
+    // // Fetch State Details from FastAPI
+    // async function loadStateDetails() {
+    //   try {
+    //     const response = await fetch(`${API_BASE_URL}/api/states/${encodeURIComponent(stateName)}`);
+    //     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    //     const data = await response.json();
+
+    //     // Inject Dynamic Hero Data
+    //     document.getElementById('hero-title').textContent = data.name;
+    //     document.getElementById('hero-capital').innerHTML = 
+    //       `<i class="fa-solid fa-location-dot text-rose-400"></i> Capital: ${data.capital} — ${data.region} Region`;
+
+    //     // Inject Content Sections
+    //     document.getElementById('page-heritage').textContent = data.heritage;
+    //     document.getElementById('page-art').textContent = data.art;
+    //     document.getElementById('page-endangered-name').textContent = `Endangered: ${data.endangeredArt}`;
+    //     document.getElementById('page-food').textContent = data.food;
+
+    //     // Set Dynamic 3D Model Properties
+    //     const modelViewer = document.getElementById('artifact-3d');
+    //     const creditText = document.getElementById('dynamic-credit-text');
+    //     const infoTitle = document.getElementById('dynamic-info-title');
+    //     const infoText = document.getElementById('dynamic-info-text');
+    //     const hotspotBtn = document.getElementById('credit-hotspot');
+
+    //     if (modelViewer) modelViewer.setAttribute('src', data.modelUrl);
+    //     if (creditText) creditText.textContent = data.modelCredit;
+    //     if (infoTitle) infoTitle.textContent = data.modelTitle;
+    //     if (infoText) infoText.textContent = data.modelDesc;
+    //     if (hotspotBtn) hotspotBtn.setAttribute('data-position', data.hotspotPos || "0 0.5 0");
+
+    //   } catch (error) {
+    //     console.error("Failed to load state details from FastAPI backend:", error);
+    //   }
+    // }
+
+    // // Trigger fetch on load
+    // loadStateDetails();
+
+    // Comment out by Romit
+    // Inject Hero Data
+    document.getElementById('hero-title').textContent = stateName || "West Bengal";
+    document.getElementById('hero-capital').innerHTML = `<i class="fa-solid fa-location-dot text-rose-400"></i> Capital: ${culturalData?.[stateName]?.capital || "City"} — ${culturalData?.[stateName]?.region || "Indian"} Region`;
+
+    // Inject Sections
+    const heritageEl = document.getElementById('page-heritage');
+    if (heritageEl) heritageEl.textContent = stateData.heritage;
+
+    const artEl = document.getElementById('page-art');
+    const endangeredEl = document.getElementById('page-endangered-name');
+    if (artEl) artEl.textContent = stateData.art;
+    if (endangeredEl) endangeredEl.textContent = `Endangered: ${stateData.endangeredArt}`;
+
+    const foodEl = document.getElementById('page-food');
+    if (foodEl) foodEl.textContent = stateData.food;
+
+    // Background Image Injection
+    if (typeof artThemes !== 'undefined' && artThemes[stateName] && artThemes[stateName].bgImage !== "none") {
+      document.body.style.backgroundImage = artThemes[stateName].bgImage;
+    } else {
+      document.body.style.backgroundColor = "#020617";
+    }
+
+    // 3D Model Configuration
+    const modelPaths = {
+      "West Bengal": "assets/dhokra.glb",
+      "Rajasthan": "assets/kathputli.glb",
+      "Karnataka": "assets/hampi.glb",
+      "Bihar": "assets/buddha.glb",
+      "Gujarat": "assets/charkha.glb",
+      "Assam": "assets/xorai.glb",
+      "Punjab": "assets/tumbi.glb",
+      "Kerala": "assets/kathakali.glb",
+      "Default": "assets/dhokra.glb"
+    };
+
+    const modelCredits = {
+      "West Bengal": '"Dhokra Female Figure" by [Creator]',
+      "Rajasthan": '"Rajasthani Puppet" by [Creator]',
+      "Karnataka": '"Stone Chariot" by [Creator]',
+      "Bihar": '"Bodhisattva Sculpture" by [Creator]',
+      "Gujarat": '"Traditional Charkha" by [Creator]',
+      "Assam": '"Bell Metal Xorai" by [Creator]',
+      "Punjab": '"Punjabi Tumbi" by [Creator]',
+      "Kerala": '"Kathakali Mask" by [Creator]',
+      "Default": '"Heritage Artifact" by [Creator]'
+    };
+
+    const modelInfo = {
+      "West Bengal": {
+        title: "Dhokra Female Figure",
+        desc: "Created using the 4,000-year-old 'cire perdue' casting technique. The distinct wire-like threads are formed by hand-rolling beeswax strings before casting.",
+        hotspotPos: "0 0.5 0"
+      },
+      "Rajasthan": {
+        title: "Traditional Kathputli",
+        desc: "Carved from a single piece of mango wood and dressed in vibrant textiles. Used for centuries to narrate local legends.",
+        hotspotPos: "0 0.8 0"
+      },
+      "Karnataka": {
+        title: "Vittala Stone Chariot",
+        desc: "An architectural marvel from the Vijayanagara Empire located in Hampi. Famous for its intricate Dravidian stone carvings.",
+        hotspotPos: "-43.45 3.30 -0.12"
+      },
+      "Bihar": {
+        title: "Pala School Bodhisattva",
+        desc: "Reflecting the classical mastery of the Pala School of Art. These intricate bronze and stone sculptures deeply influenced Buddhist art.",
+        hotspotPos: "0 -0.01 -0.01"
+      },
+      "Gujarat": {
+        title: "Traditional Charkha",
+        desc: "A hand-cranked spinning wheel central to Gujarat's profound textile weaving heritage. A historical symbol of self-reliance.",
+        hotspotPos: "0 0.6 0"
+      },
+      "Assam": {
+        title: "Bell Metal Xorai",
+        desc: "An iconic symbol of Assamese culture. This bell-metal tray with a stand and a cover is used to offer betel nut to guests.",
+        hotspotPos: "0 0.4 0"
+      },
+      "Punjab": {
+        title: "Traditional Tumbi",
+        desc: "Crafted from a wooden stick mounted on a small gourd resonator, its distinct rhythmic twang is the backbone of Bhangra.",
+        hotspotPos: "0 0.5 0"
+      },
+      "Kerala": {
+        title: "Kathakali Headpiece",
+        desc: "Carved from Kumil wood and decorated with papier-mâché and glass. Transforms the performer into a mythological character.",
+        hotspotPos: "0 0.8 0"
+      },
+      "Default": {
+        title: "Heritage Artifact",
+        desc: "A stunning representation of regional craftsmanship. Preservation efforts are currently underway.",
+        hotspotPos: "0 0.5 0"
+      }
+    };
+
+    const modelViewer = document.getElementById('artifact-3d');
+    const creditText = document.getElementById('dynamic-credit-text');
+    const infoTitle = document.getElementById('dynamic-info-title');
+    const infoText = document.getElementById('dynamic-info-text');
+    const hotspotBtn = document.getElementById('credit-hotspot');
+
+    if (modelViewer) modelViewer.setAttribute('src', modelPaths[stateName] || modelPaths["Default"]);
+    if (creditText) creditText.textContent = modelCredits[stateName] || modelCredits["Default"];
+    if (infoTitle && infoText && hotspotBtn) {
+      const targetInfo = modelInfo[stateName] || modelInfo["Default"];
+      infoTitle.textContent = targetInfo.title;
+      infoText.textContent = targetInfo.desc;
+      hotspotBtn.setAttribute('data-position', targetInfo.hotspotPos);
+    }
+    // Comment out by Romit
+
+    if (modelViewer) {
+      modelViewer.addEventListener('load', () => modelViewer.classList.add('ready'));
+      modelViewer.addEventListener('error', () => modelViewer.classList.remove('ready'));
+    }
+
+    const popover = document.getElementById('credit-popover');
+    if (hotspotBtn && popover && modelViewer) {
+      const blockCameraSnap = (e) => { e.preventDefault(); e.stopPropagation(); };
+      hotspotBtn.addEventListener('pointerdown', blockCameraSnap);
+      hotspotBtn.addEventListener('mousedown', blockCameraSnap);
+      hotspotBtn.addEventListener('click', (e) => {
+        blockCameraSnap(e);
+        popover.classList.toggle('hidden');
+        popover.classList.contains('hidden') ? modelViewer.setAttribute('auto-rotate', '') : modelViewer.removeAttribute('auto-rotate');
+      });
+    }
+
+    // ==========================================
+    // SANSKRITI AI INTERACTIVE CHAT ENGINE
+    // ==========================================
+    const aiPanel = document.getElementById('ai-panel');
+    const aiContextTag = document.getElementById('ai-context-tag');
+    const chatLog = document.getElementById('ai-chat-log');
+    const aiForm = document.getElementById('ai-chat-form');
+    const aiInput = document.getElementById('ai-chat-input');
+
+    let activeQueryType = 'history'; // Tracks which segment the user clicked
+
+    // Bubble Generators
+    function createAIBubble(htmlContent) {
+      return `
+        <div class="flex justify-start w-full opacity-0 animate-[fade-in_0.3s_ease-out_forwards]">
+          <div class="bg-slate-800 p-4 rounded-xl rounded-tl-none border border-slate-700 max-w-[90%] shadow-md">
+            <p class="text-sm text-slate-300 leading-relaxed">${htmlContent}</p>
+          </div>
+        </div>`;
+    }
+
+    function createUserBubble(text) {
+      return `
+        <div class="flex justify-end w-full opacity-0 animate-[fade-in_0.3s_ease-out_forwards]">
+          <div class="bg-amber-600/20 p-3 rounded-xl rounded-tr-none border border-amber-500/30 max-w-[85%] shadow-md">
+            <p class="text-sm text-amber-100">${text}</p>
+          </div>
+        </div>`;
+    }
+
+    // Open Panel & Fetch Initial AI Context
+    // Open Panel & Initialize Context locally
+    function openAI(queryType) {
+      const currentState = urlParams.get('name') || "West Bengal";
+      activeQueryType = queryType;
+      aiPanel.classList.remove('translate-x-full');
+
+      let initialMessage = '';
+      if (queryType === 'history') {
+        aiContextTag.textContent = "Historical Context Mode";
+        aiContextTag.className = "text-[10px] text-amber-500 uppercase tracking-widest";
+        initialMessage = `<strong>Historical Architecture of ${currentState}:</strong><br><br>Ask me any questions about the historical monuments and cultural heritage of ${currentState}.`;
+      } else if (queryType === 'artform') {
+        aiContextTag.textContent = "Preservation Engine";
+        aiContextTag.className = "text-[10px] text-purple-400 uppercase tracking-widest";
+        initialMessage = `<strong>Preservation Engine for ${currentState}:</strong><br><br>How can I assist you with the artforms or living traditions of this region?`;
+      } else if (queryType === 'recipe') {
+        aiContextTag.textContent = "Culinary Matrix";
+        aiContextTag.className = "text-[10px] text-emerald-400 uppercase tracking-widest";
+        initialMessage = `<strong>Culinary Heritage of ${currentState}:</strong><br><br>What traditional recipe or cooking technique would you like to explore?`;
+      }
+
+      chatLog.innerHTML = createAIBubble(initialMessage);
+    }
+
+    function closeAI() {
+      aiPanel.classList.add('translate-x-full');
+    }
+
+    // Handle User Chat Submissions
+    // Handle User Chat Submissions via FastAPI
+    // Handle User Chat Submissions via FastAPI
+    // Handle User Chat Submissions via FastAPI
+    if (aiForm) {
+      aiForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const message = aiInput.value.trim();
+        if (!message) return;
+
+        // Inject User Message Bubble
+        chatLog.insertAdjacentHTML('beforeend', createUserBubble(message));
+        aiInput.value = '';
+        chatLog.scrollTop = chatLog.scrollHeight;
+
+        // Inject Typing Indicator
+        const typingId = 'typing-' + Date.now();
+        chatLog.insertAdjacentHTML('beforeend', `<div id="${typingId}" class="text-xs text-slate-500 animate-pulse mt-2 ml-2 italic">Sanskriti AI is typing...</div>`);
+        chatLog.scrollTop = chatLog.scrollHeight;
+
+        try {
+          const currentState = urlParams.get('name') || "West Bengal";
+
+          const response = await fetch(`${API_BASE_URL}/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              state_name: currentState,
+              user_query: message
+            })
+          });
+          console.log(response)
+          // 1. CHECK IF THE RESPONSE IS NOT OK (e.g., 404, 422, 500)
+          if (!response.ok) {
+            // Try to read FastAPI's error detail if available
+            const errorData = await response.json().catch(() => null);
+            const errorMessage = errorData?.detail || `Server returned error status: ${response.status}`;
+            throw new Error(errorMessage);
+          }
+
+          // 2. PARSE SUCCESSFUL JSON
+          const data = await response.json();
+          document.getElementById(typingId)?.remove();
+
+          // Inject AI response
+          chatLog.insertAdjacentHTML('beforeend', createAIBubble(data.ai_response));
+
+        } catch (err) {
+          // NOW YOUR CATCH BLOCK WILL EXECUTE PROPERLY
+          console.error("Caught error in JS:", err.message);
+          document.getElementById(typingId)?.remove();
+          chatLog.insertAdjacentHTML('beforeend', createAIBubble(`Error: ${err.message}`));
+        } finally {
+          chatLog.scrollTop = chatLog.scrollHeight;
+        }
+      });
+    }
+
+
+    document.body.addEventListener('click', () => {
+      const audio = document.getElementById('bg-audio');
+      if (audio) audio.play().catch(e => console.log("Audio blocked"));
+    }, { once: true });
+  </script>
+</body>
+
+</html>
